@@ -1,0 +1,45 @@
+QUESTION:
+
+The Nautilus system admins team has prepared scripts to automate several day-to-day tasks. They want them to be deployed on all app servers in Stratos DC on a set schedule. Before that they need to test similar functionality with a sample cron job. Therefore, perform the steps below:
+
+a. Install cronie package on all Nautilus app servers and start crond service.
+
+b. Add a cron */5 * * * * echo hello > /tmp/cron_text for root user.   ------>  means “At every 5th minute" */5 * * * *
+
+SOLUTION:
+
+ssh tony@stapp01 
+sudo -i 
+
+dnf install crond -y 		
+
+systemctl start crond
+systemctl enable crond
+systemctl status crond
+
+● crond.service - Command Scheduler
+     Loaded: loaded (/usr/lib/systemd/system/crond.service; enabled; preset: enabled)
+     Active: active (running) since Sun 2025-07-27 14:03:14 UTC; 14s ago
+   Main PID: 2556 (crond)
+      Tasks: 1 (limit: 411434)
+     Memory: 968.0K
+     CGroup: /docker/0607a1bbe81a2377d591f0e4ccc24363f5200916ce0630f651e742f4177dc4d7/system.slice/crond.service
+             └─2556 /usr/sbin/crond -n
+
+Jul 27 14:03:14 stapp01.stratos.xfusioncorp.com systemd[2556]: crond.service: Executing: /usr/sbin/crond -n
+Jul 27 14:03:14 stapp01.stratos.xfusioncorp.com crond[2556]: (CRON) STARTUP (1.5.7)
+Jul 27 14:03:14 stapp01.stratos.xfusioncorp.com crond[2556]: (CRON) INFO (Syslog will be used instead of sendmail.)
+Jul 27 14:03:14 stapp01.stratos.xfusioncorp.com crond[2556]: (CRON) INFO (RANDOM_DELAY will be scaled with factor 37% if used.)
+Jul 27 14:03:14 stapp01.stratos.xfusioncorp.com crond[2556]: (CRON) INFO (running with inotify support)
+Jul 27 14:03:14 stapp01.stratos.xfusioncorp.com crond[2556]: (CRON) INFO (@reboot jobs will be run at computer's startup.)
+Jul 27 14:03:23 stapp01.stratos.xfusioncorp.com systemd[1]: crond.service: Changed dead -> running
+Jul 27 14:03:23 stapp01.stratos.xfusioncorp.com systemd[1]: crond.service: Failed to reset devices.allow/devices.deny: Operation not permitted
+Jul 27 14:03:23 stapp01.stratos.xfusioncorp.com systemd[1]: crond.service: Failed to set 'trusted.invocation_id' xattr on control group /docker/0607a1bbe81a2377d591f0e4ccc24363f5200916ce0630f651e742f4177dc4d7/system.slice/crond.service, ignoring: Operation not permitted
+Jul 27 14:03:23 stapp01.stratos.xfusioncorp.com systemd[1]: crond.service: Failed to remove 'trusted.delegate' xattr flag on control group /docker/0607a1bbe81a2377d591f0e4ccc24363f5200916ce0630f651e742f4177dc4d7/system.slice/crond.service, ignoring: Operation not permitted
+
+crontab -e		----> enter the command in it
+
+crontab -l		-----> to verify it
+*/5 * * * * echo hello > /tmp/cron_text
+
+do it with all the other users
